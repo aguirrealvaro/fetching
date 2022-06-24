@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { getUsers, getUser, editUser } from "./endpoints";
-import { EditUserReturnType, EditUserVariablesType, UserType } from "./types";
 
 export const ReactQuery: FunctionComponent = () => {
   const { data: users, isFetching: isFetchingUsers } = useQuery("users", getUsers, {
