@@ -1,13 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import { getUsers, getUser, editUser, EditUserVariablesType, EditUserReturnType } from "./endpoints";
-
-type UserType = {
-  userid: number;
-  id: 1;
-  title: string;
-  completed: boolean;
-};
+import { getUsers, getUser, editUser } from "./endpoints";
+import { EditUserReturnType, EditUserVariablesType, UserType } from "./types";
 
 export const ReactQuery: FunctionComponent = () => {
   const { data: users, isFetching: isFetchingUsers } = useQuery<UserType[]>("users", getUsers, {
