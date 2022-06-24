@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { useQuery } from "react-query";
-import { client } from "./client";
+import { getDogs } from "./endpoints";
 
 type DogsType = {
   message: Record<string, string[]>;
@@ -13,11 +13,7 @@ type DogsType = {
 }; */
 
 export const ReactQuery: FunctionComponent = () => {
-  const { data: dogs, isLoading: isLoadingDogs } = useQuery<DogsType>(
-    "dogs",
-    () => client("https://dog.ceo/api/breeds/list/all"),
-    {}
-  );
+  const { data: dogs } = useQuery<DogsType>("dogs", getDogs);
 
   /*  const {
     mutate: fetchSelectedDog,
@@ -42,7 +38,7 @@ export const ReactQuery: FunctionComponent = () => {
     </div>
   ); */
 
-  console.log(dogs);
+  console.log({ dogs });
 
   return <div>query</div>;
 };

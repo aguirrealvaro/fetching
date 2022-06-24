@@ -6,7 +6,13 @@ import { Fetch } from "./Fetch"; */
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ReactQuery } from "./ReactQuery";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export const App: FunctionComponent = () => {
   return (
