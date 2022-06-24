@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient, useMutation } from "react-query";
 import { getUsers, getUser, editUser } from "./endpoints";
+import { fetcher } from "./fetcher";
 
 type UserType = {
   userid: number;
@@ -22,17 +23,18 @@ export const ReactQuery: FunctionComponent = () => {
     enabled: !!selectedUser,
   });
 
-  const { refetch: editUserRequest } = useQuery<UserType>(["user", selectedUser, "edited"], editUser, {
-    enabled: false,
-  });
+  const mutation = useMutation(editUser);
 
   const handleSelectUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedUser(event.target.value);
   };
 
-  const handleEditUser = () => editUserRequest();
+  const handleEditUser = () => {
+    if (!selectedUser) return;
+    mutation.mutate(selectedUser); // como pasarle un segundo parametro? tipar useMutation variables
+  };
 
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
 
   const handleRefreshUser = () => {
     getUserRequest();
