@@ -2,11 +2,10 @@ const defaultOptions = {
   method: "GET",
 };
 
-const baseURL = "https://jsonplaceholder.typicode.com";
-
 export const fetcher = async <T>(
   url: URL | RequestInfo,
-  options: RequestInit = defaultOptions
+  options: RequestInit = defaultOptions,
+  baseURL = "https://jsonplaceholder.typicode.com"
 ): Promise<T> => {
   try {
     const response = await fetch(`${baseURL}/${url}`, options);
