@@ -17,6 +17,6 @@ export const fetcher = async <T>(
       throw { statusCode: response.status, originalError: data };
     }
   } catch (err) {
-    throw { statusCode: 0, originalError: err };
+    throw err;
   }
 };
