@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { getUsers, getUser, editUser } from "./endpoints";
 
 type UserType = {
@@ -32,7 +32,16 @@ export const ReactQuery: FunctionComponent = () => {
 
   const handleEditUser = () => editUserRequest();
 
-  const handleRefreshUser = () => getUserRequest();
+  const queryClient = useQueryClient();
+
+  const handleRefreshUser = () => {
+    getUserRequest();
+
+    // it is supposed we avoid refetching, we can get data from cache(not sure how):
+    //queryClient.invalidateQueries("user");
+    //queryClient.cancelQueries("user");
+    //queryClient.getQueryData("user");
+  };
 
   if (isFetchingUsers) return <div>...</div>;
 
