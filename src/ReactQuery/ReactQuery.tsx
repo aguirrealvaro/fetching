@@ -1,47 +1,43 @@
 import React, { FunctionComponent, useState } from "react";
 import { useQuery } from "react-query";
-import { getDogs, getDog } from "./endpoints";
+import { getUsers, getUser } from "./endpoints";
 
-type DogsType = {
-  message: Record<string, string[]>;
-  success: boolean;
-};
-
-type DogType = {
-  message: string[];
-  success: boolean;
+type UserType = {
+  userid: number;
+  id: 1;
+  title: string;
+  completed: boolean;
 };
 
 export const ReactQuery: FunctionComponent = () => {
-  const { data: dogs, isFetching: isFetchingDogs } = useQuery<DogsType>("dogs", getDogs);
+  const { data: users, isFetching: isFetchingUsers } = useQuery<UserType[]>("users", getUsers);
 
-  const [selectedDog, setSelectedDog] = useState<string | undefined>(undefined);
+  const [selectedUser, setSelectedUser] = useState<string | undefined>(undefined);
 
-  const { data: dog, isFetching: isFetchingDog } = useQuery<DogType>(["dog", selectedDog], getDog, {
-    enabled: !!selectedDog,
+  const { data: user, isFetching: isFetchingUser } = useQuery<UserType>(["user", selectedUser], getUser, {
+    enabled: !!selectedUser,
   });
 
-  const onSelectDog = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDog(event.target.value);
+  const handleSelectUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedUser(event.target.value);
   };
 
-  if (isFetchingDogs) return <div>...</div>;
+  if (isFetchingUsers) return <div>...</div>;
 
   return (
     <div>
-      <select onChange={onSelectDog}>
+      <select onChange={handleSelectUser}>
         <option>Select option</option>
-        {dogs &&
-          Object.keys(dogs.message).map((dog) => {
+        {users &&
+          users.map(({ id }) => {
             return (
-              <option value={dog} key={dog}>
-                {dog}
+              <option value={id} key={id}>
+                {id}
               </option>
             );
           })}
-        <option value="gato">gato</option>
       </select>
-      <div>{isFetchingDog ? <span>...</span> : <img src={dog?.message[0]} />}</div>
+      <div>{isFetchingUser ? <span>...</span> : user?.title}</div>
     </div>
   );
 };

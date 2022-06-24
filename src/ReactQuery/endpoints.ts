@@ -2,12 +2,12 @@
 import { QueryFunctionContext } from "react-query";
 import { fetcher } from "./fetcher";
 
-export const getDogs = () => {
-  return fetcher("https://dog.ceo/api/breeds/list/all");
+export const getUsers = () => {
+  return fetcher("https://jsonplaceholder.typicode.com/todos/");
 };
 
-export const getDog = ({ queryKey }: QueryFunctionContext) => {
-  const [_, dog] = queryKey;
+export const getUser = ({ queryKey }: QueryFunctionContext) => {
+  const [_, id] = queryKey;
 
-  return fetcher(`https://dog.ceo/api/breed/${dog}/images`);
+  return fetcher(`https://jsonplaceholder.typicode.com/todos/${id}`);
 };
