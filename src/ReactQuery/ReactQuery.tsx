@@ -1,44 +1,47 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useQuery } from "react-query";
-import { getDogs } from "./endpoints";
+import { getDogs, getDog } from "./endpoints";
 
 type DogsType = {
   message: Record<string, string[]>;
   success: boolean;
 };
 
-/* type DogType = {
+type DogType = {
   message: string[];
   success: boolean;
-}; */
+};
 
 export const ReactQuery: FunctionComponent = () => {
-  const { data: dogs } = useQuery<DogsType>("dogs", getDogs);
+  const { data: dogs, isFetching: isFetchingDogs } = useQuery<DogsType>("dogs", getDogs);
 
-  /*  const {
-    mutate: fetchSelectedDog,
-    data: dog,
-    isLoading: isLoadingDog,
-  } = useMutation("dog", (dog: string) =>
-    fetch(`https://dog.ceo/api/breed/${dog}/images`).then((res) => res.json())
-  ); */
+  const [selectedDog, setSelectedDog] = useState<string | undefined>(undefined);
 
-  /* const onSelectDog = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setAnimal(event.target.value);
-    //fetchSelectedDog(event.target.value);
-  }; */
+  const { data: dog, isFetching: isFetchingDog } = useQuery<DogType>(["dog", selectedDog], getDog, {
+    enabled: !!selectedDog,
+  });
 
-  /* return (
+  const onSelectDog = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDog(event.target.value);
+  };
+
+  if (isFetchingDogs) return <div>...</div>;
+
+  return (
     <div>
-      <select onChange={onSelectDog} role="combobox">
+      <select onChange={onSelectDog}>
         <option>Select option</option>
-        <option value="perro">perro</option>
+        {dogs &&
+          Object.keys(dogs.message).map((dog) => {
+            return (
+              <option value={dog} key={dog}>
+                {dog}
+              </option>
+            );
+          })}
         <option value="gato">gato</option>
       </select>
+      <div>{isFetchingDog ? <span>...</span> : <img src={dog?.message[0]} />}</div>
     </div>
-  ); */
-
-  console.log({ dogs });
-
-  return <div>query</div>;
+  );
 };
