@@ -3,13 +3,13 @@ const defaultOptions = {
   method: "GET",
 };
 
-export const fetcher = async (
+export const fetcher = async <T>(
   url: URL | RequestInfo,
   options: RequestInit = defaultOptions
-): Promise<any> => {
+): Promise<T> => {
   try {
     const response = await fetch(url, options);
-    const data = await response.json();
+    const data: T = await response.json();
 
     if (response.ok) {
       return data;
