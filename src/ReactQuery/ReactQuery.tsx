@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { getUsers, getUser, editUser } from "./endpoints";
-import { fetcher } from "./fetcher";
 
 type UserType = {
   userid: number;
@@ -11,7 +10,9 @@ type UserType = {
 };
 
 export const ReactQuery: FunctionComponent = () => {
-  const { data: users, isFetching: isFetchingUsers } = useQuery<UserType[]>("users", getUsers);
+  const { data: users, isFetching: isFetchingUsers } = useQuery<UserType[]>("users", getUsers, {
+    onSuccess: () => console.log("on success get users"),
+  });
 
   const [selectedUser, setSelectedUser] = useState<string | undefined>(undefined);
 
@@ -23,7 +24,11 @@ export const ReactQuery: FunctionComponent = () => {
     enabled: !!selectedUser,
   });
 
-  const mutation = useMutation(editUser);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(editUser, {
+    onSuccess: () => queryClient.invalidateQueries("user"), // i can refetch users onSuccess Mutation
+  });
 
   const handleSelectUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedUser(event.target.value);
@@ -34,15 +39,8 @@ export const ReactQuery: FunctionComponent = () => {
     mutation.mutate(selectedUser); // como pasarle un segundo parametro? tipar useMutation variables
   };
 
-  //const queryClient = useQueryClient();
-
   const handleRefreshUser = () => {
     getUserRequest();
-
-    // it is supposed we avoid refetching, we can get data from cache(not sure how):
-    //queryClient.invalidateQueries("user");
-    //queryClient.cancelQueries("user");
-    //queryClient.getQueryData("user");
   };
 
   if (isFetchingUsers) return <div>...</div>;
