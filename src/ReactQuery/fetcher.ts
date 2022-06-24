@@ -1,14 +1,15 @@
 const defaultOptions = {
-  "Content-type": "application/json; charset=UTF-8",
   method: "GET",
 };
+
+const baseURL = "https://jsonplaceholder.typicode.com";
 
 export const fetcher = async <T>(
   url: URL | RequestInfo,
   options: RequestInit = defaultOptions
 ): Promise<T> => {
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(`${baseURL}/${url}`, options);
     const data: T = await response.json();
 
     if (response.ok) {
