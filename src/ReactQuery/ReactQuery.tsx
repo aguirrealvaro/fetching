@@ -3,17 +3,11 @@ import { useQuery, useQueryClient, useMutation } from "react-query";
 import { getUsers, getUser, editUser } from "./endpoints";
 
 export const ReactQuery: FunctionComponent = () => {
-  const { data: users, isFetching: isFetchingUsers } = useQuery("users", getUsers, {
-    onSuccess: () => console.log("on success get users"),
-  });
+  const usersQuery = useQuery("users", getUsers);
 
   const [selectedUser, setSelectedUser] = useState<string | undefined>(undefined);
 
-  const {
-    data: user,
-    isFetching: isFetchingUser,
-    refetch: getUserRequest,
-  } = useQuery(["user", selectedUser], getUser, {
+  const userQuery = useQuery(["user", selectedUser], getUser, {
     enabled: !!selectedUser,
   });
 
@@ -33,31 +27,30 @@ export const ReactQuery: FunctionComponent = () => {
   };
 
   const handleRefreshUser = () => {
-    getUserRequest();
+    userQuery.refetch();
   };
 
-  if (isFetchingUsers) return <div>...</div>;
+  if (usersQuery.isFetching) return <div>...</div>;
 
   return (
     <div>
       <select onChange={handleSelectUser}>
         <option>Select option</option>
-        {users &&
-          users.map(({ id }) => {
-            return (
-              <option value={id} key={id}>
-                {id}
-              </option>
-            );
-          })}
+        {usersQuery.data?.map(({ id }) => {
+          return (
+            <option value={id} key={id}>
+              {id}
+            </option>
+          );
+        })}
       </select>
       {selectedUser && (
         <div>
-          {isFetchingUser ? (
+          {userQuery.isFetching ? (
             <span>...</span>
           ) : (
             <div>
-              <span>{user?.title}</span>
+              <span>{userQuery.data?.title}</span>
               <button onClick={handleEditUser}>Edit</button>
               <button onClick={handleRefreshUser}>Refetch user</button>
             </div>
