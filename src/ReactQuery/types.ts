@@ -5,6 +5,8 @@ export type UserType = {
   completed: boolean;
 };
 
+export type GetUserQueryKeyType = [string, string | undefined];
+
 export type EditUserVariablesType = { id: string; newTitle: string };
 
 export type EditUserReturnType = { id: number };

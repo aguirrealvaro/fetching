@@ -1,12 +1,12 @@
 import { QueryFunctionContext } from "react-query";
 import { fetcher } from "./fetcher";
-import { EditUserReturnType, EditUserVariablesType, UserType } from "./types";
+import { GetUserQueryKeyType, EditUserReturnType, EditUserVariablesType, UserType } from "./types";
 
 export const getUsers = (): Promise<UserType[]> => {
   return fetcher("https://jsonplaceholder.typicode.com/todos/");
 };
 
-export const getUser = ({ queryKey }: QueryFunctionContext): Promise<UserType> => {
+export const getUser = ({ queryKey }: QueryFunctionContext<GetUserQueryKeyType>): Promise<UserType> => {
   const [_, id] = queryKey;
 
   return fetcher(`https://jsonplaceholder.typicode.com/todos/${id}`);
