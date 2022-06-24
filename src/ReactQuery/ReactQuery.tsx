@@ -17,18 +17,22 @@ export const ReactQuery: FunctionComponent = () => {
   const {
     data: user,
     isFetching: isFetchingUser,
-    refetch,
+    refetch: getUserRequest,
   } = useQuery<UserType>(["user", selectedUser], getUser, {
     enabled: !!selectedUser,
   });
 
-  /* const { data: user, isFetching: isFetchingUser } = useQuery<UserType>(["user", selectedUser], editUser, {
-    enabled: !!selectedUser,
-  }); */
+  const { refetch: editUserRequest } = useQuery<UserType>(["user", selectedUser, "edited"], editUser, {
+    enabled: false,
+  });
 
   const handleSelectUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedUser(event.target.value);
   };
+
+  const handleEditUser = () => editUserRequest();
+
+  const handleRefreshUser = () => getUserRequest();
 
   if (isFetchingUsers) return <div>...</div>;
 
@@ -45,9 +49,19 @@ export const ReactQuery: FunctionComponent = () => {
             );
           })}
       </select>
-      <div>{isFetchingUser ? <span>...</span> : user?.title}</div>
-
-      <button onClick={() => refetch()}>Refetch user</button>
+      {selectedUser && (
+        <div>
+          {isFetchingUser ? (
+            <span>...</span>
+          ) : (
+            <div>
+              <span>{user?.title}</span>
+              <button onClick={handleEditUser}>Edit</button>
+              <button onClick={handleRefreshUser}>Refetch user</button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

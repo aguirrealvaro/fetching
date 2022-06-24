@@ -1,4 +1,7 @@
-const defaultOptions = { method: "GET" };
+const defaultOptions = {
+  "Content-type": "application/json; charset=UTF-8",
+  method: "GET",
+};
 
 export const fetcher = async (
   url: URL | RequestInfo,
