@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { useQuery } from "react-query";
-import { getUsers, getUser } from "./endpoints";
+import { getUsers, getUser, editUser } from "./endpoints";
 
 type UserType = {
   userid: number;
@@ -14,9 +14,17 @@ export const ReactQuery: FunctionComponent = () => {
 
   const [selectedUser, setSelectedUser] = useState<string | undefined>(undefined);
 
-  const { data: user, isFetching: isFetchingUser } = useQuery<UserType>(["user", selectedUser], getUser, {
+  const {
+    data: user,
+    isFetching: isFetchingUser,
+    refetch,
+  } = useQuery<UserType>(["user", selectedUser], getUser, {
     enabled: !!selectedUser,
   });
+
+  /* const { data: user, isFetching: isFetchingUser } = useQuery<UserType>(["user", selectedUser], editUser, {
+    enabled: !!selectedUser,
+  }); */
 
   const handleSelectUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedUser(event.target.value);
@@ -38,6 +46,8 @@ export const ReactQuery: FunctionComponent = () => {
           })}
       </select>
       <div>{isFetchingUser ? <span>...</span> : user?.title}</div>
+
+      <button onClick={() => refetch()}>Refetch user</button>
     </div>
   );
 };

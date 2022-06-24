@@ -11,3 +11,9 @@ export const getUser = ({ queryKey }: QueryFunctionContext) => {
 
   return fetcher(`https://jsonplaceholder.typicode.com/todos/${id}`);
 };
+
+export const editUser = ({ queryKey }: QueryFunctionContext) => {
+  const [_, id] = queryKey;
+
+  return fetcher(`https://jsonplaceholder.typicode.com/todos/${id}`, { method: "PUT" });
+};
