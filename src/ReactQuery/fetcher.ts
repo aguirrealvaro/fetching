@@ -7,7 +7,16 @@ export const fetcher = async (
   url: URL | RequestInfo,
   options: RequestInit = defaultOptions
 ): Promise<any> => {
-  const resp = await fetch(url, options);
-  const data = await resp.json();
-  return data;
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw { statusCode: response.status, originalError: data };
+    }
+  } catch (err) {
+    throw { statusCode: 0, originalError: err };
+  }
 };
