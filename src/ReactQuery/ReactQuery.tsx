@@ -4,7 +4,7 @@ import { getUsers, getUser, editUser } from "./endpoints";
 import { EditUserReturnType, EditUserVariablesType, UserType } from "./types";
 
 export const ReactQuery: FunctionComponent = () => {
-  const { data: users, isFetching: isFetchingUsers } = useQuery<UserType[]>("users", getUsers, {
+  const { data: users, isFetching: isFetchingUsers } = useQuery("users", getUsers, {
     onSuccess: () => console.log("on success get users"),
   });
 
@@ -14,13 +14,13 @@ export const ReactQuery: FunctionComponent = () => {
     data: user,
     isFetching: isFetchingUser,
     refetch: getUserRequest,
-  } = useQuery<UserType>(["user", selectedUser], getUser, {
+  } = useQuery(["user", selectedUser], getUser, {
     enabled: !!selectedUser,
   });
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<EditUserReturnType, unknown, EditUserVariablesType>(editUser, {
+  const mutation = useMutation(editUser, {
     onSuccess: () => queryClient.invalidateQueries("user"), // refetch users onSuccess Mutation
   });
 
