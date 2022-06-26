@@ -28,6 +28,8 @@ export const ReactQuery: FunctionComponent = () => {
   const handleEditUser = () => {
     if (!selectedUser) return;
     mutation.mutate({ id: selectedUser, newTitle: "new title" });
+
+    //if i need to get the response of the mutation, i should use "mutateAsync" instead of "mutate"
   };
 
   const handleRefreshUser = () => {
