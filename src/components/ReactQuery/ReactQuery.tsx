@@ -14,15 +14,11 @@ export const ReactQuery: FunctionComponent = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(editUser, {
-    onSuccess: () => {
-      // updates after mutation (two ways)
-      queryClient.invalidateQueries("user"); // better
+    //updates after mutation invalidating the query
+    onSuccess: () => queryClient.invalidateQueries("user"),
 
-      /* queryClient.setQueryData(["todos", "detail", newTodo.id], newTodo);
-      queryClient.setQueriesData(["todos", "list"], (previous) =>
-        previous.map((todo) => (todo.id === newTodo.id ? newtodo : todo))
-      ); */
-    },
+    // or do it manually
+    // onSuccess: (editedUser) => queryClient.setQueryData(["user", selectedUser], editedUser),
   });
 
   const handleSelectUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
